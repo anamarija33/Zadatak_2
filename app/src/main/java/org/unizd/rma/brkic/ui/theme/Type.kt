@@ -1,4 +1,4 @@
-package org.unizd.rma.zadatak2.ui.theme
+package org.unizd.rma.brkic.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

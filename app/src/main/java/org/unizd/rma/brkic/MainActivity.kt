@@ -1,4 +1,4 @@
-package org.unizd.rma.zadatak2
+package org.unizd.rma.brkic
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import org.unizd.rma.zadatak2.ui.theme.Zadatak2Theme
+import org.unizd.rma.brkic.ui.theme.Zadatak2Theme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package org.unizd.rma.zadatak2
+package org.unizd.rma.brkic
 
 import org.junit.Test
 

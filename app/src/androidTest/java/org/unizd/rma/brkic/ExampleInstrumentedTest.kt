@@ -1,4 +1,4 @@
-package org.unizd.rma.zadatak2
+package org.unizd.rma.brkic
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

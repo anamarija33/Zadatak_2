@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "org.unizd.rma.zadatak2"
+    namespace = "org.unizd.rma.brkic"
     compileSdk {
         version = release(37)
     }
