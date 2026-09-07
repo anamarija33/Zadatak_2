@@ -3,7 +3,6 @@ package org.unizd.rma.brkic.presentation.skincareItem
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -32,7 +31,7 @@ import org.unizd.rma.brkic.presentation.components.ProductList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactsScreen (
+fun ProductsScreen (
     viewModel: ProductViewModel = hiltViewModel(),
     onAddClick: () -> Unit = {},
     onContactClick: (SkincareItem) -> Unit = {},

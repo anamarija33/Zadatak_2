@@ -1,6 +1,7 @@
 package org.unizd.rma.brkic.domain.models
 
 import android.net.Uri
+import org.unizd.rma.brkic.presentation.ProductViewModel
 import java.util.Date
 
 data class SkincareItem(
@@ -9,6 +10,6 @@ data class SkincareItem(
     val brand: String,
     val openingDate: Date,
     val imageUri: String?= null,
-    val typeOfProduct:String
+    val typeOfProduct: ProductType?
 
 )
