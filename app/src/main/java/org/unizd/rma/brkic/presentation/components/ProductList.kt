@@ -24,7 +24,7 @@ fun ProductList (
         items(products, key = { it.id }) { product ->
             ProductCard(
                 product,
-                onContactClick = { onProductClick(product) },
+                onProductClick = { onProductClick(product) },
                 onDeleteClick = { onDeleteClick(product) }
             )
         }
