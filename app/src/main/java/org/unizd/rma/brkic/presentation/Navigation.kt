@@ -22,115 +22,118 @@ sealed class Screen(val route: String) {
     object ProductDetail : Screen("product_detail_screen/{productId}") {
         fun createRoute(productId: Int) = "product_detail_screen/$productId"
     }
-    object AddProduct: Screen("add_product_screen")
-    object EditProduct: Screen("edit_product/{productId}") {
+
+    object AddProduct : Screen("add_product_screen")
+    object EditProduct : Screen("edit_product/{productId}") {
         fun createRoute(productId: Int) = "edit_product/$productId"
     }
-    object Camera: Screen("camera_screen/{productId}") {
+
+    object Camera : Screen("camera_screen/{productId}") {
+        fun createRoute(productId: Int) = "camera_screen/$productId"
     }
 
-    fun createRoute(productId: Int) = "camera_screen/$productId"
-}
 
-@Composable
-fun Navigation () {
-    val navController = rememberNavController()
-    val context = LocalContext.current
+    @Composable
+    fun Navigation() {
+        val navController = rememberNavController()
+        val context = LocalContext.current
 
-    NavHost(
-        navController = navController,
-        startDestination = Screen.Products.route
-    ) {
-        composable(Screen.Products.route) {
-            ProductsScreen(
-                onAddClick = {
-                    navController.navigate(Screen.AddProduct.route)
-                },
-                onNavigateToDetail = { skincareItem ->
-                    navController.navigate(Screen.ProductDetail.createRoute(skincareItem.id))
-                }
-            )
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Products.route
+        ) {
+            composable(Screen.Products.route) {
+                ProductsScreen(
+                    onAddClick = {
+                        navController.navigate(Screen.AddProduct.route)
+                    },
+                    onNavigateToDetail = { skincareItem ->
+                        navController.navigate(Screen.ProductDetail.createRoute(skincareItem.id))
+                    }
+                )
+            }
+
+            composable(Screen.AddProduct.route) {
+                AddProductScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onSaveSuccess = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(
+                Screen.ProductDetail.route,
+                arguments = listOf(
+                    navArgument("productId") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getInt("productId")
+                ProductDetailScreen(
+                    productId = productId!!,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onEditClick = { skincareItem ->
+                        navController.navigate(Screen.EditProduct.createRoute(skincareItem.id))
+                    },
+                    onPhotoClick = {
+                        navController.navigate(Screen.Camera.createRoute(productId))
+                    }
+                )
+            }
+
+            composable(Screen.AddProduct.route) {
+                AddProductScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onSaveSuccess = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.EditProduct.route,
+                arguments = listOf(
+                    navArgument("productId") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getInt("productId") ?: return@composable
+                AddProductScreen(
+                    skincareItem = null,
+                    productIdForEdit = productId,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onSaveSuccess = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.Camera.route,
+                arguments = listOf(
+                    navArgument("productId") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getInt("productId") ?: return@composable
+                CameraScreen(
+                    context = context,
+                    productId = productId,
+                    onPhotoTaken = { photoPath ->
+                        navController.popBackStack()
+                    },
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
         }
-
-        composable(Screen.AddProduct.route) {
-            AddProductScreen (
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onSaveSuccess = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable (Screen.ProductDetail.route,
-            arguments = listOf(
-                navArgument("productId") {type = NavType.IntType}
-            )
-        ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId")
-            ProductDetailScreen(
-                productId = productId!!,
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onEditClick = { skincareItem ->
-                    navController.navigate(Screen.EditProduct.createRoute(skincareItem.id))
-                },
-                onPhotoClick = {
-                    navController.navigate(Screen.Camera.createRoute(productId))
-                }
-            )
-        }
-
-        composable (Screen.AddProduct.route) {
-            AddProductScreen (
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onSaveSuccess = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable (
-            route = Screen.EditProduct.route,
-            arguments = listOf(
-                navArgument("productId") {type = NavType.IntType}
-            )
-        ) {backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId") ?: return@composable
-            AddProductScreen(
-                skincareItem = null,
-                productIdForEdit = productId,
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onSaveSuccess = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable(
-            route = Screen.Camera.route,
-            arguments = listOf(
-                navArgument("productId") { type = NavType.IntType }
-            )
-        ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId") ?: return@composable
-            CameraScreen(
-                context = context,
-                productId = productId,
-                onPhotoTaken = { photoPath ->
-                    navController.popBackStack()
-                },
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
     }
 }

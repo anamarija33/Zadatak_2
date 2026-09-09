@@ -1,6 +1,5 @@
 package org.unizd.rma.brkic.domain.usecases.product
 
-import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import org.unizd.rma.brkic.domain.models.SkincareItem
 import org.unizd.rma.brkic.domain.repositories.SkincareItemRepository

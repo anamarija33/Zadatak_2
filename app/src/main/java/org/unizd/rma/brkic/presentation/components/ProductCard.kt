@@ -28,7 +28,6 @@ import org.unizd.rma.brkic.domain.models.SkincareItem
 import coil.compose.AsyncImage
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.room3.Delete
 
 @Composable
 fun ProductCard(

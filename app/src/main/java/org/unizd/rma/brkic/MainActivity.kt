@@ -20,7 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dagger.hilt.android.AndroidEntryPoint
-import org.unizd.rma.brkic.presentation.Navigation
+
+import org.unizd.rma.brkic.presentation.Screen.AddProduct.Navigation
 import org.unizd.rma.brkic.ui.theme.SkincareTheme
 
 @AndroidEntryPoint
