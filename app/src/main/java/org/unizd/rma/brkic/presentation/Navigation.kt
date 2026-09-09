@@ -85,17 +85,6 @@ sealed class Screen(val route: String) {
                 )
             }
 
-            composable(Screen.AddProduct.route) {
-                AddProductScreen(
-                    onBackClick = {
-                        navController.popBackStack()
-                    },
-                    onSaveSuccess = {
-                        navController.popBackStack()
-                    }
-                )
-            }
-
             composable(
                 route = Screen.EditProduct.route,
                 arguments = listOf(
