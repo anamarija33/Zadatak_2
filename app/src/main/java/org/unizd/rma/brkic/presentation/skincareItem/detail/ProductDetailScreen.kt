@@ -138,18 +138,18 @@ fun ProductDetailScreen (
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Button(
-                    onClick = onPhotoClick,
-                    modifier = Modifier.fillMaxWidth().height(50.dp)
-                ) {
-                    Icon(Icons.Filled.PhotoCamera,
-                        contentDescription = null
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Text("Take a Picture!")
-                }
+//                Button(
+//                    onClick = onPhotoClick,
+//                    modifier = Modifier.fillMaxWidth().height(50.dp)
+//                ) {
+//                    Icon(Icons.Filled.PhotoCamera,
+//                        contentDescription = null
+//                    )
+//
+//                    Spacer(modifier = Modifier.width(8.dp))
+//
+//                    Text("Take a Picture!")
+//                }
             }
         } ?: run {
             Box(

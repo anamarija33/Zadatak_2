@@ -79,7 +79,6 @@ fun AddProductScreen(
     onPhotoClick: ()-> Unit = {},
     photoPath: String? = null,
     onPhotoConsumed: ()-> Unit = {}
-
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val name by viewModel.name.collectAsStateWithLifecycle()
@@ -87,6 +86,7 @@ fun AddProductScreen(
     val typeOfProduct by viewModel.typeOfProduct.collectAsStateWithLifecycle()
     val imageUri by viewModel.imageUri.collectAsStateWithLifecycle()
     val openingDate by viewModel.openingDate.collectAsStateWithLifecycle()
+
 
     LaunchedEffect(productIdForEdit) {
         if (productIdForEdit != null) {
@@ -313,4 +313,7 @@ fun AddProductScreen(
     }
 
 }
-
+@Composable
+fun MinimalDropdownMenu(content: @Composable () -> Unit) {
+    TODO("Not yet implemented")
+}

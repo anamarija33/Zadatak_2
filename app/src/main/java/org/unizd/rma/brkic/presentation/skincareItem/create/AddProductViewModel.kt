@@ -40,6 +40,8 @@ class AddProductViewModel @Inject constructor(
     val typeOfProduct = _typeOfProduct.asStateFlow()
     private var productId: Int? = null
 
+    private var loaded = false
+
     fun setName(name: String) {
         _name.value = name
     }
@@ -62,6 +64,9 @@ class AddProductViewModel @Inject constructor(
     }
 
     fun loadProductForEdit(id: Int) {
+        // kad u edit modu idem slikati, ne sejva sliku- ovo je flag da se vrati nazad ako je slika loadana
+        if(loaded)return
+        loaded=true
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val product = repository.getSingleProduct(id)
