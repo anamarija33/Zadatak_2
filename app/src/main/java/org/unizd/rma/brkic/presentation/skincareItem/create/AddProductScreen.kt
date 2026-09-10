@@ -118,12 +118,12 @@ fun AddProductScreen(
         TopAppBar(
             title = {
                 Text(
-                    if (productIdForEdit != null) "Edit Product" else "Add contact"
+                    if (productIdForEdit != null) "Edit Product" else "Add product"
                 )
             },
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Nazad")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -163,7 +163,7 @@ fun AddProductScreen(
                     TextField(
                         value = name,
                         onValueChange = { viewModel.setName(it) },
-                        label = {Text("Ime*")},
+                        label = {Text("Name*")},
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
@@ -198,10 +198,10 @@ fun AddProductScreen(
                         value = openingDate?.let { dateFormatter.format(Date(it)) } ?: "",
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Datum otvaranja*") },
+                        label = { Text("Opening date") },
                         trailingIcon = {
                             IconButton(onClick = { showDatePicker = true }) {
-                                Icon(Icons.Default.DateRange, contentDescription = "Odaberi datum")
+                                Icon(Icons.Default.DateRange, contentDescription = "Pick a date")
                             }
                         },
                         modifier = Modifier
@@ -304,7 +304,7 @@ fun AddProductScreen(
                             .fillMaxWidth()
                             .height(50.dp)
                     ) {
-                        Text("Spremi")
+                        Text("Save")
                     }
 
                 }
@@ -314,7 +314,3 @@ fun AddProductScreen(
 
 }
 
-@Composable
-fun MinimalDropdownMenu(content: @Composable () -> Unit) {
-    TODO("Not yet implemented")
-}

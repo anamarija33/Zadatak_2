@@ -16,7 +16,6 @@ class ProductViewModel  @Inject constructor
    (
     private val getProductsUseCase: GetProductsUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
-    private val searchProductUseCase: SearchProductUseCase
     ) : ViewModel() {
         private val _uiState =
             MutableStateFlow<ProductUiState>(ProductUiState.Loading)
@@ -25,8 +24,6 @@ class ProductViewModel  @Inject constructor
         private val _selectedProduct = MutableStateFlow<SkincareItem?>(null)
         val selectedProduct = _selectedProduct.asStateFlow()
 
-        private val _searchQuery = MutableStateFlow("")
-        val searchQuery = _searchQuery.asStateFlow()
 
         init {
             // učitavanje kontakata
@@ -46,7 +43,7 @@ class ProductViewModel  @Inject constructor
                             }
                         }
                 } catch (e: Exception) {
-                    _uiState.value = ProductUiState.Error(e.message ?: "Greška")
+                    _uiState.value = ProductUiState.Error(e.message ?: "Error")
                 }
             }
         }
@@ -57,7 +54,7 @@ class ProductViewModel  @Inject constructor
                     .onSuccess {  }
                     .onFailure { error ->
                         _uiState.value = ProductUiState.Error(
-                            error.message ?: "Greška pri brisanju"
+                            error.message ?: "Error while deleting an item"
                         )
                     }
             }
@@ -67,30 +64,7 @@ class ProductViewModel  @Inject constructor
             _selectedProduct.value = skincareItem
         }
 
-        fun updateSearchQuery(query: String) {
-            _searchQuery.value = query
 
-            if (query.isEmpty()) {
-                loadProducts()
-            } else {
-                viewModelScope.launch {
-                    try {
-                        searchProductUseCase(query)
-                            .collect {skincareItems ->
-                                _uiState.value = if (skincareItems.isEmpty()) {
-                                    ProductUiState.Empty
-                                } else {
-                                    ProductUiState.Success(skincareItems)
-                                }
-                            }
-                    } catch (e: Exception) {
-                        _uiState.value = ProductUiState.Error(
-                            e.message ?: "Greška pri pretrazi"
-                        )
-                    }
-                }
-            }
-        }
 
         fun clearError() {
             loadProducts()

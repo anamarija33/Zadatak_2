@@ -34,19 +34,17 @@ import org.unizd.rma.brkic.presentation.components.ProductList
 fun ProductsScreen (
     viewModel: ProductViewModel = hiltViewModel(),
     onAddClick: () -> Unit = {},
-    onContactClick: (SkincareItem) -> Unit = {},
     onNavigateToDetail: (SkincareItem) -> Unit = {}
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 
     Scaffold (
         topBar = {
             TopAppBar(
                 title  = {
-                    Text("Moji proizvodi")
+                    Text("My skincare Items")
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -58,7 +56,7 @@ fun ProductsScreen (
                 onClick = onAddClick,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Filled.Add, "Dodaj kontakt")
+                Icon(Icons.Filled.Add, "Add a skincare item")
             }
         }
     ) {

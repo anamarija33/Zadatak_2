@@ -123,6 +123,11 @@ fun ProductDetailScreen (
                     label = "Brand",
                     value = skincareItem.brand
                 )
+
+                ProductInfoCard(
+                    label = "Product type",
+                    value = skincareItem.typeOfProduct.toString()
+                )
                 val dateFormatter = remember { SimpleDateFormat("dd.MM.yyyy") }
                 if (skincareItem.openingDate !=null) {
                     ProductInfoCard(
