@@ -40,7 +40,7 @@ import java.io.File
 @Composable
 fun CameraScreen(
     context: Context,
-    productId: Int,
+    productId: Int?=null,
     productDetailViewModel: ProductDetailViewModel = hiltViewModel(),
     onPhotoTaken: (photoPath: String) -> Unit,
     onBackClick: () -> Unit
@@ -49,7 +49,7 @@ fun CameraScreen(
         Manifest.permission.CAMERA
     )
     LaunchedEffect(productId) {
-        productDetailViewModel.loadProduct(productId)
+        if(productId !=null) productDetailViewModel.loadProduct(productId)
     }
 
     val cameraLauncher = rememberLauncherForActivityResult(
@@ -58,7 +58,7 @@ fun CameraScreen(
         bitmap?.let {
             val photoPath = org.unizd.rma.brkic.presentation.camera.saveBitmapToFile(context, it)
 
-            productDetailViewModel.updateProductImage(photoPath)
+            if(productId !=null) productDetailViewModel.updateProductImage(photoPath)
 
             onPhotoTaken(photoPath)
         }

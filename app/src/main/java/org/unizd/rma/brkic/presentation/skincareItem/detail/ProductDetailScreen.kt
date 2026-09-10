@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +39,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import org.unizd.rma.brkic.domain.models.SkincareItem
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,11 +123,11 @@ fun ProductDetailScreen (
                     label = "Brand",
                     value = skincareItem.brand
                 )
-
+                val dateFormatter = remember { SimpleDateFormat("dd.MM.yyyy") }
                 if (skincareItem.openingDate !=null) {
                     ProductInfoCard(
                         label = "Opening date",
-                        value = skincareItem.openingDate.toString()
+                        value = dateFormatter.format(Date(skincareItem.openingDate))
                     )
                 }
 

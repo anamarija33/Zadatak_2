@@ -31,7 +31,7 @@ class AddProductViewModel @Inject constructor(
     private val _brand = MutableStateFlow("")
     val brand = _brand.asStateFlow()
 
-    private val _openingDate = MutableStateFlow(Date())
+    private val _openingDate = MutableStateFlow<Long?>(null)
     val openingDate = _openingDate.asStateFlow()
 
     private val _imageUri = MutableStateFlow("")
@@ -48,12 +48,14 @@ class AddProductViewModel @Inject constructor(
         _brand.value = brand
     }
 
-    fun setopeningDate(openingDate: Date) {
+    fun setopeningDate(openingDate: Long) {
         _openingDate.value = openingDate
     }
 
-    fun setImageUri(uri: String) {
-        _imageUri.value = uri
+    fun setImageUri(uri: String?) {
+        if (uri != null) {
+            _imageUri.value = uri
+        }
     }
     fun setTypeOfProduct(typeOfProduct: ProductType?) {
         _typeOfProduct.value = typeOfProduct
@@ -72,7 +74,7 @@ class AddProductViewModel @Inject constructor(
                     _typeOfProduct.value=product.typeOfProduct
                 }
             } catch (e: Exception) {
-                _uiState.value = AddProductUiState.Error("Greška pri učitavanju kontakta: ${e.message}")
+                _uiState.value = AddProductUiState.Error("There was an error loading the Item: ${e.message}")
             }
         }
     }
@@ -87,7 +89,7 @@ class AddProductViewModel @Inject constructor(
 
     fun saveProduct() {
         if (!validateForm()) {
-            _uiState.value = AddProductUiState.Error("Popunite sva polja")
+            _uiState.value = AddProductUiState.Error("Fill all missing fields")
             return
         }
 
@@ -99,7 +101,7 @@ class AddProductViewModel @Inject constructor(
                 name = _name.value,
                 brand = _brand.value,
                 openingDate = _openingDate.value,
-                imageUri = _imageUri.value,
+                imageUri = _imageUri.value.ifEmpty { null },
                 typeOfProduct = _typeOfProduct.value
             )
 
@@ -116,7 +118,7 @@ class AddProductViewModel @Inject constructor(
                     _uiState.value = AddProductUiState.Success
                 }
                 .onFailure { error ->
-                    _uiState.value = AddProductUiState.Error(error.message ?: "Greška")
+                    _uiState.value = AddProductUiState.Error(error.message ?: "Error")
                 }
         }
     }

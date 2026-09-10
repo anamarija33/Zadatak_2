@@ -11,15 +11,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,9 +35,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,14 +47,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import org.unizd.rma.brkic.domain.models.ProductType
 import org.unizd.rma.brkic.domain.models.SkincareItem
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+
+
+
+
+
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,13 +75,18 @@ fun AddProductScreen(
     skincareItem: SkincareItem? = null,
     productIdForEdit: Int? = null,
     onBackClick: () -> Unit = {},
-    onSaveSuccess: () -> Unit = {}
+    onSaveSuccess: () -> Unit = {},
+    onPhotoClick: ()-> Unit = {},
+    photoPath: String? = null,
+    onPhotoConsumed: ()-> Unit = {}
+
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val name by viewModel.name.collectAsStateWithLifecycle()
     val brand by viewModel.brand.collectAsStateWithLifecycle()
     val typeOfProduct by viewModel.typeOfProduct.collectAsStateWithLifecycle()
     val imageUri by viewModel.imageUri.collectAsStateWithLifecycle()
+    val openingDate by viewModel.openingDate.collectAsStateWithLifecycle()
 
     LaunchedEffect(productIdForEdit) {
         if (productIdForEdit != null) {
@@ -81,12 +106,19 @@ fun AddProductScreen(
         }
     }
 
+    LaunchedEffect(photoPath) {
+        photoPath.let{
+            viewModel.setImageUri(it)
+            onPhotoConsumed()
+        }
+    }
+
     Scaffold (
     topBar = {
         TopAppBar(
             title = {
                 Text(
-                    if (productIdForEdit != null) "Uredi kontakt" else "Dodaj kontakt"
+                    if (productIdForEdit != null) "Edit Product" else "Add contact"
                 )
             },
             navigationIcon = {
@@ -107,6 +139,7 @@ fun AddProductScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
+
             when (uiState) {
                 is AddProductUiState.Loading -> {
                     Box(
@@ -146,6 +179,60 @@ fun AddProductScreen(
                             .padding(bottom = 16.dp),
                         singleLine = true
                     )
+
+
+
+
+                    var showDatePicker by remember { mutableStateOf(false) }
+                    val datePickerState = rememberDatePickerState(
+                        initialSelectedDateMillis = openingDate
+                    )
+
+                    val dateFormatter = remember {
+                        SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).apply {
+                            timeZone = TimeZone.getTimeZone("UTC")
+                        }
+                    }
+
+                    TextField(
+                        value = openingDate?.let { dateFormatter.format(Date(it)) } ?: "",
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Datum otvaranja*") },
+                        trailingIcon = {
+                            IconButton(onClick = { showDatePicker = true }) {
+                                Icon(Icons.Default.DateRange, contentDescription = "Odaberi datum")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                    )
+
+                    if (showDatePicker) {
+                        DatePickerDialog(
+                            onDismissRequest = { showDatePicker = false },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        datePickerState.selectedDateMillis?.let {
+                                            viewModel.setopeningDate(it)
+                                        }
+                                        showDatePicker = false
+                                    }
+                                ) { Text("U redu") }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { showDatePicker = false }) {
+                                    Text("Odustani")
+                                }
+                            }
+                        ) {
+                            DatePicker(state = datePickerState)
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+
 // https://developer.android.com/develop/ui/compose/components/menu
                     //youtu.be/_lee9vN1FiE
                     var expanded by remember { mutableStateOf(false) }
@@ -174,6 +261,37 @@ fun AddProductScreen(
                                     )
                             }
                         }
+
+                    }
+                    Spacer(
+                        modifier = Modifier.height(16.dp)
+                    )
+
+
+                    if (imageUri.isNotEmpty()) {
+                        AsyncImage(
+                            model = imageUri,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(150.dp)
+                                .clip(MaterialTheme.shapes.medium),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+
+                    Button(
+                        onClick = onPhotoClick,
+                        modifier = Modifier.fillMaxWidth().height(50.dp)
+                    ) {
+                        Icon(Icons.Filled.PhotoCamera,
+                            contentDescription = null
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text("Take a Picture!")
                     }
 
                     Spacer(
