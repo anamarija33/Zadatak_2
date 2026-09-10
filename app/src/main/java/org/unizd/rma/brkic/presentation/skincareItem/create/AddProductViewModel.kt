@@ -83,14 +83,14 @@ class AddProductViewModel @Inject constructor(
             }
         }
     }
-    fun loadProductForEditDirect(product: SkincareItem) {
-        _name.value = product.name
-        _brand.value = product.brand
-        _openingDate.value = product.openingDate
-        _imageUri.value = product.imageUri ?: ""
-        productId = product.id
-        _typeOfProduct.value = product.typeOfProduct
-    }
+//    fun loadProductForEditDirect(product: SkincareItem) {
+//        _name.value = product.name
+//        _brand.value = product.brand
+//        _openingDate.value = product.openingDate
+//        _imageUri.value = product.imageUri ?: ""
+//        productId = product.id
+//        _typeOfProduct.value = product.typeOfProduct
+//    }
 
     fun saveProduct() {
         if (!validateForm()) {

@@ -94,11 +94,11 @@ fun AddProductScreen(
         }
     }
 
-    LaunchedEffect(skincareItem) {
-        skincareItem?.let {
-            viewModel.loadProductForEditDirect(it)
-        }
-    }
+//    LaunchedEffect(skincareItem) {
+//        skincareItem?.let {
+//            viewModel.loadProductForEditDirect(it)
+//        }
+//    }
 
     LaunchedEffect(uiState) {
         if (uiState is AddProductUiState.Success) {
